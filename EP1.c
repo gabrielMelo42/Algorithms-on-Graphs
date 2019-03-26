@@ -12,9 +12,9 @@ typedef struct s{
 } VERTICE;
 
 
-typedef struct s{
+typedef struct{
 	VERTICE* adj[MAX];
-	char [] cor; /*b=branco c=cinza p=preto*/
+	char cor[MAX]; /*b=branco c=cinza p=preto*/
 	int pai[MAX];
 	int minor[MAX];
 	int ordem[MAX];
@@ -25,119 +25,153 @@ void inicializar(GRAFO* G){
 	int i;
 	G->ord=0;
 	for(i=1; i<=12; i++){
-		G->adj=NULL;
-		G->cor[i]=b;
+		G->adj[i]=NULL;
+		G->cor[i]='b';
 		G->pai[i]=0;
-		G->minor[i]=i;
+		G->minor[i]=MAX;
 		G->ordem[i]=0;
 	}
 }
 
 
-void inserir(GRAFO G, VERTICE* v; int adjacencia){
-	VERTICE* adjacente =(VERTICE*)malloc(sizeof(VERTICE));
-	v->adj[v->indice]=
-	G->adj[indice]=indice;
+void inserir(GRAFO* G, int eu, int adjacencia){
+	VERTICE* vert=(VERTICE*)malloc(sizeof(VERTICE));
+	vert->indice=adjacencia;
+	vert->prox=NULL;
+
+	VERTICE* aux;
+	aux=G->adj[eu];
+	if(aux){
+		while(aux->prox){
+			aux=aux->prox;
+		}
+		aux->prox=vert;
+	}
+
+	else G->adj[eu]=vert;
 }
 
-
-
-
-void DFS1(GRAFO* G, VERTICE* y, int* ord){
-	VERTICE* p=G->adj[y];
-	while(p!=NULL){
-		int u=p->indice;
-		if(cor[u]==b){
-			cor[u]=c;
-			*ord++;
-			ordem[u]=ord;
-			minor[u]=ordem[u];
-			pai[u]=y->indice;
-			DFS1(G, u, &ord);
+void imprimir(GRAFO* G){
+	int i;
+	for(i=1; i<=12; i++){
+		VERTICE* p = G->adj[i];
+		printf("%d tem como adjacentes ", i);
+		while(p!=NULL){
+			printf("%d ", p->indice);
+			p=p->prox;
 		}
-		p=p->prox;
+		printf("\n");
 	}
 }
 
-void DFS2(GRAFO* G, VERTICE* z){
-	VERTICE* p=G->adj[z];
-	int i;
-	while(p!=NULL){
+
+
+
+void DFS1(GRAFO* G, int y){
+	VERTICE* p= G->adj[y];
+	while(p){
 		int u=p->indice;
-		if(pai[u]==z->indice) DFS2(G,p);
+		if(G->cor[u]=='b'){
+			G->cor[u]='c';
+			G->ord++;
+			G->ordem[u]= G->ord;
+			G->minor[u]= G->ord;
+			G->pai[u]= y;
+			DFS1(G, u);
+		}
+		p=p->prox;
+	} G->cor[y]='p';
+}
+
+void DFS2(GRAFO* G, int z){
+	VERTICE* p= G->adj[z];
+	int u;
+	while(p){
+		u=p->indice;
+		if(G->pai[u]==z) DFS2(G, u);
 		p=p->prox;
 	}
 
 	p=G->adj[z];
-	while(p!=NULL){
+	while(p){
 		u=p->indice;
-		if( (u!=pai[z->indice]) && (minor[u]<minor[z->indice]) ) minor[z->indice]=minor[u];
-	}
-
-	}
-
-
-
-
-bool DFST(GRAFO* G){
-	int i;
-	for(i=1; i<=12; i++){
-		pai[i]=0;
-		cor[i]=b;
-		minor[i]=i;
-		ordem[i]=0;
-	}
-
-	int ord=0;
-	//VERTICE* vi=1;
-	cor[i]=c;
-	ord++;
-	ordem[i]=ord;
-	DFS1(G,v);
-
-	if(ord==i){
-		minor[i]=ordem[i];
-		DFS2(G,v);
-	}
-
-	bool biconexo=true;
-	for(i=1; i<=12; i++){
-		if( && ordem[i]==minor[i]){
-			biconexo=false;
+		if(u!=G->pai[z] && G->minor[u] < G->minor[z]){
+			G->minor[z]=G->minor[u];
 		}
+		p=p->prox;
 	}
-
-	return biconexo;
 }
 
-
-
-
-int main(){
-	GRAFO G;
-	VERTICE* v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12;
-	inserir(G, v1, 1);
-	inserir(G,v2,2);
-	inserir(G, v3,3);
-	inserir(G,v4,4);
-	inserir(G,v5,5);
-	inserir(G,v6,6);
-	inserir(G,v7,7);
-	inserir(G,v8,8);
-	inserir(G,v9,9);
-	inserir(G,v10,10);
-	inserir(G,v11,11);
-	inserir(G,v12,12);
-
-	GRAFO* G;
-	G->adj[1]=1;
 	
 
 
 
 
+bool DFST(GRAFO* G){
+	/*int i;
+	for(i=1; i<=12; i++){
+		pai[i]=0;
+		cor[i]='b';
+		minor[i]=i;
+		ordem[i]=0;
+	}
+
+	int ord=0;*/
+	
+	G->cor[1]='c';
+	G->ord++;
+	G->ordem[1]=G->ord;
+	DFS1(G, 1);
+
+	if(G->ord==MAX){
+		G->minor[1]=G->ordem[1];
+		DFS2(G, 1);
+	}
+
+	bool biconexo=true;
+	int i;
+	for(i=1; i<=12; i++){
+		if(i==1 && G->ordem[i]==G->minor[i]) biconexo=false;
+	}
+	return biconexo;
+}
 
 
 
+int main(){
+	GRAFO* G;
+	inicializar(G);
+	inserir(G, 1, 2);
+	inserir(G, 1, 3);
+	inserir(G, 2, 1);
+	inserir(G, 2, 4);
+	inserir(G, 2, 5);
+	inserir(G, 3, 1);
+	inserir(G, 3, 5);
+	inserir(G, 4, 2);
+	inserir(G, 4, 6);
+	inserir(G, 4, 7);
+	inserir(G, 5, 2);
+	inserir(G, 5, 3);
+	inserir(G, 5, 6);
+	inserir(G, 6, 4);
+	inserir(G, 6, 5);
+	inserir(G, 7, 4);
+	inserir(G, 7, 8);
+	inserir(G, 7, 9);
+	inserir(G, 7, 12);
+	inserir(G, 8, 7);
+	inserir(G, 8, 9);
+	inserir(G, 9, 7);
+	inserir(G, 9, 10);
+	inserir(G, 10, 9);
+	inserir(G, 10, 11);
+	inserir(G, 10, 12);
+	inserir(G, 11, 9);
+	inserir(G, 11, 10);
+	inserir(G, 12, 7);
+	inserir(G, 12, 10);
+	imprimir(G);
+	DFST(G);
 	return 0;
 }

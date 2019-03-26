@@ -5,7 +5,6 @@
 #define C 1
 #define P 2
 #define MAX 13
-#define MAXV 1000
 
 typedef struct s{
 	int indice;
@@ -29,7 +28,7 @@ void inicializar(GRAFO* G){
 		G->adj[i]=NULL;
 		G->cor[i]=B;
 		G->pai[i]=0;
-		G->minor[i]=MAXV;
+		G->minor[i]=MAX-1;
 		G->ordem[i]=0;
 	}
 }
@@ -48,14 +47,14 @@ void inserir(GRAFO* G, int eu, int adjacencia){
 		}
 		aux->prox=vert;
 	}
-
 	else G->adj[eu]=vert;
 }
 
 void imprimir(GRAFO* G){
 	int i;
+	VERTICE* p;
 	for(i=1; i<MAX; i++){
-		VERTICE* p = G->adj[i];
+		p = G->adj[i];
 		printf("%d tem como adjacentes ", i);
 		while(p!=NULL){
 			printf("%d ", p->indice);
@@ -70,14 +69,14 @@ void imprimir(GRAFO* G){
 
 void DFS1(GRAFO* G, int y){
 	VERTICE* p= G->adj[y];
-	int u;
 	while(p){
-		/*u=p->indice;*/
-		if(G->cor[p->indice]==B){
+        if(G->cor[p->indice]==B){
 			G->cor[p->indice]=C;
-			G->ord = G->ord+1;
-			G->ordem[p->indice]= G->ord;
-			G->minor[p->indice]= G->ord;
+			G->ordem[p->indice]=++(G->ord);
+			G->minor[p->indice]=G->ord;
+			//G->ord = G->ord+1;
+			//G->ordem[p->indice]= G->ord;
+			//G->minor[p->indice]= G->ord;
 			G->pai[p->indice]= y;
 			DFS1(G, p->indice);
 		}
@@ -88,10 +87,10 @@ void DFS1(GRAFO* G, int y){
 
 void DFS2(GRAFO* G, int z){
 	VERTICE* p= G->adj[z];
-	int u;
 	while(p){
-		//u=p->indice;
-		if(G->pai[p->indice]==z) DFS2(G, u);
+		if(G->pai[p->indice]==z){
+		    DFS2(G, p->indice);
+		}
 		p=p->prox;
 	}
 
@@ -114,7 +113,7 @@ bool DFST(GRAFO* G){
 	if(G->ord==MAX-1){
 		G->minor[1]=G->ordem[1];
 		DFS2(G, 1);
-	}
+	
 	bool biconexo=true;
 	int i;
 	for(i=1; i<MAX; i++){
@@ -126,7 +125,7 @@ bool DFST(GRAFO* G){
 	}
 	return biconexo;
 }
-
+}
 
 
 int main(){
@@ -162,7 +161,6 @@ int main(){
 	inserir(G, 11, 10);
 	inserir(G, 12, 7);
 	inserir(G, 12, 10);
-	//imprimir(G);
 	if(DFST(G)==true) printf("O GRAFO EH BICONEXO\n");
 	else printf("O GRAFO NAO EH BICONEXO\n");
 	return 0;

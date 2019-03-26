@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
-#define b branco
-#define c cinza
-#define p preto
-#define MAX 12
+#define B 0
+#define C 1
+#define P 2
+#define MAX 13
+#define MAXV 1000
 
 typedef struct s{
 	int indice;
@@ -14,21 +15,21 @@ typedef struct s{
 
 typedef struct{
 	VERTICE* adj[MAX];
-	char cor[MAX]; /*b=branco c=cinza p=preto*/
+	int cor[MAX];
 	int pai[MAX];
 	int minor[MAX];
 	int ordem[MAX];
 	int ord;
 } GRAFO;
-
+//explicar os bagui de cor
 void inicializar(GRAFO* G){
 	int i;
 	G->ord=0;
-	for(i=1; i<=12; i++){
+	for(i=1; i<MAX; i++){
 		G->adj[i]=NULL;
-		G->cor[i]='b';
+		G->cor[i]=B;
 		G->pai[i]=0;
-		G->minor[i]=MAX;
+		G->minor[i]=MAXV;
 		G->ordem[i]=0;
 	}
 }
@@ -53,7 +54,7 @@ void inserir(GRAFO* G, int eu, int adjacencia){
 
 void imprimir(GRAFO* G){
 	int i;
-	for(i=1; i<=12; i++){
+	for(i=1; i<MAX; i++){
 		VERTICE* p = G->adj[i];
 		printf("%d tem como adjacentes ", i);
 		while(p!=NULL){
@@ -69,69 +70,59 @@ void imprimir(GRAFO* G){
 
 void DFS1(GRAFO* G, int y){
 	VERTICE* p= G->adj[y];
+	int u;
 	while(p){
-		int u=p->indice;
-		if(G->cor[u]=='b'){
-			G->cor[u]='c';
-			G->ord++;
-			G->ordem[u]= G->ord;
-			G->minor[u]= G->ord;
-			G->pai[u]= y;
-			DFS1(G, u);
+		/*u=p->indice;*/
+		if(G->cor[p->indice]==B){
+			G->cor[p->indice]=C;
+			G->ord = G->ord+1;
+			G->ordem[p->indice]= G->ord;
+			G->minor[p->indice]= G->ord;
+			G->pai[p->indice]= y;
+			DFS1(G, p->indice);
 		}
 		p=p->prox;
-	} G->cor[y]='p';
+	} 
+	G->cor[y]=P;
 }
 
 void DFS2(GRAFO* G, int z){
 	VERTICE* p= G->adj[z];
 	int u;
 	while(p){
-		u=p->indice;
-		if(G->pai[u]==z) DFS2(G, u);
+		//u=p->indice;
+		if(G->pai[p->indice]==z) DFS2(G, u);
 		p=p->prox;
 	}
 
 	p=G->adj[z];
 	while(p){
-		u=p->indice;
-		if(u!=G->pai[z] && G->minor[u] < G->minor[z]){
-			G->minor[z]=G->minor[u];
+		//u=p->indice;
+		if(p->indice!=G->pai[z] && G->minor[p->indice] < G->minor[z]){
+			G->minor[z]=G->minor[p->indice];
 		}
 		p=p->prox;
 	}
 }
 
-	
-
-
-
-
 bool DFST(GRAFO* G){
-	/*int i;
-	for(i=1; i<=12; i++){
-		pai[i]=0;
-		cor[i]='b';
-		minor[i]=i;
-		ordem[i]=0;
-	}
-
-	int ord=0;*/
-	
-	G->cor[1]='c';
-	G->ord++;
+	G->cor[1]=C;
+	G->ord=G->ord+1;
 	G->ordem[1]=G->ord;
+	G->minor[1]=G->ord;
 	DFS1(G, 1);
-
-	if(G->ord==MAX){
+	if(G->ord==MAX-1){
 		G->minor[1]=G->ordem[1];
 		DFS2(G, 1);
 	}
-
 	bool biconexo=true;
 	int i;
-	for(i=1; i<=12; i++){
-		if(i==1 && G->ordem[i]==G->minor[i]) biconexo=false;
+	for(i=1; i<MAX; i++){
+		printf("O vertice %d tem ordem %d e minor %d\n", i, G->ordem[i], G->minor[i]);
+		if(i!=1 && G->ordem[i]==G->minor[i]){
+			printf("ESSE VERTICE EH CRITICO\n");
+			biconexo=false;
+		}
 	}
 	return biconexo;
 }
@@ -139,7 +130,7 @@ bool DFST(GRAFO* G){
 
 
 int main(){
-	GRAFO* G;
+	GRAFO* G=(GRAFO*)malloc(sizeof(GRAFO));
 	inicializar(G);
 	inserir(G, 1, 2);
 	inserir(G, 1, 3);
@@ -171,7 +162,8 @@ int main(){
 	inserir(G, 11, 10);
 	inserir(G, 12, 7);
 	inserir(G, 12, 10);
-	imprimir(G);
-	DFST(G);
+	//imprimir(G);
+	if(DFST(G)==true) printf("O GRAFO EH BICONEXO\n");
+	else printf("O GRAFO NAO EH BICONEXO\n");
 	return 0;
 }

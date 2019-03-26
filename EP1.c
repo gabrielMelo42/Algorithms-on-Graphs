@@ -1,3 +1,6 @@
+//Gabriel Andre Melo de Oliveira Silva
+//Numero USP: 10724312
+
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -119,7 +122,7 @@ bool DFST(GRAFO* G){
 	for(i=1; i<MAX; i++){
 		printf("O vertice %d tem ordem %d e minor %d\n", i, G->ordem[i], G->minor[i]);
 		if(i!=1 && G->ordem[i]==G->minor[i]){
-			printf("ESSE VERTICE EH CRITICO\n");
+			printf("A ARESTA %i - %i EH CRITICA\n",i,G->pai[i]);
 			biconexo=false;
 		}
 	}

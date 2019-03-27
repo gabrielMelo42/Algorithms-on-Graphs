@@ -1,3 +1,6 @@
+//Gabriel Andre Melo de Oliveira Silva
+//Numero USP: 10724312
+
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>

@@ -6,6 +6,8 @@
 #define P 2
 #define MAX 13
 
+//Sobre as cores: B significa Branco, C significa Cinza, P significa Preto
+
 typedef struct s{
 	int indice;
 	struct s* prox;
@@ -20,7 +22,7 @@ typedef struct{
 	int ordem[MAX];
 	int ord;
 } GRAFO;
-//explicar os bagui de cor
+
 void inicializar(GRAFO* G){
 	int i;
 	G->ord=0;

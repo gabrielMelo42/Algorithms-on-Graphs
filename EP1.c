@@ -113,21 +113,20 @@ bool DFST(GRAFO* G){
 	G->ordem[1]=G->ord;
 	G->minor[1]=G->ord;
 	DFS1(G, 1);
+	bool biconexo=true;
 	if(G->ord==MAX-1){
 		G->minor[1]=G->ordem[1];
 		DFS2(G, 1);
-	
-	bool biconexo=true;
-	int i;
-	for(i=1; i<MAX; i++){
-		printf("O vertice %d tem ordem %d e minor %d\n", i, G->ordem[i], G->minor[i]);
-		if(i!=1 && G->ordem[i]==G->minor[i]){
-			printf("A ARESTA %i - %i EH CRITICA\n",i,G->pai[i]);
-			biconexo=false;
+		int i;
+		for(i=1; i<MAX; i++){
+			printf("O vertice %d tem ordem %d e minor %d\n", i, G->ordem[i], G->minor[i]);
+			if(i!=1 && G->ordem[i]==G->minor[i]){
+				printf("A ARESTA %i - %i EH CRITICA\n",G->pai[i],i);
+				biconexo=false;
+			}
 		}
 	}
 	return biconexo;
-}
 }
 
 

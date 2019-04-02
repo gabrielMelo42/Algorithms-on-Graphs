@@ -1,0 +1,28 @@
+Algoritmos e Estruturas de Dados II
+Gabriel Andre Melo de Oliveira Silva
+Numero USP:10724312
+
+O presente EP tem o objetivo de definir se um dado grafo,
+informado anteriormente, eh ou nao biconexo, alem de informar a ordem e o minor de cada vertice,
+bem como a aresta critica desse grafo.
+
+Serao feitas algumas definicoes:
+Grafo Conexo: Um grafo em que ha um caminho entre quaisquer dois vertices desse grafo.
+Grafo biconexo: Um grafo em que se retirada uma aresta qualquer, esse grafo continua a ser conexo.
+
+O programa tera a seguinte saida:
+
+O vertice 1 tem ordem 1 e minor 1
+O vertice 2 tem ordem 2 e minor 1
+O vertice 3 tem ordem 6 e minor 1
+O vertice 4 tem ordem 3 e minor 1
+O vertice 5 tem ordem 5 e minor 1
+O vertice 6 tem ordem 4 e minor 1
+O vertice 7 tem ordem 7 e minor 7
+A ARESTA 4 - 7 EH CRITICA
+O vertice 8 tem ordem 8 e minor 7
+O vertice 9 tem ordem 9 e minor 7
+O vertice 10 tem ordem 10 e minor 7
+O vertice 11 tem ordem 11 e minor 9
+O vertice 12 tem ordem 12 e minor 7
+O GRAFO NAO EH BICONEXO

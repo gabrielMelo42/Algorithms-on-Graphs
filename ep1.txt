@@ -6,8 +6,8 @@ O presente EP tem o objetivo de definir se um dado grafo,
 informado anteriormente, eh ou nao biconexo, alem de informar a ordem e o minor de cada vertice,
 bem como a aresta critica desse grafo.
 
-Serao feitas algumas definicoes:
-Grafo Conexo: Um grafo em que ha um caminho entre quaisquer dois vertices desse grafo.
+Serao feitas as seguintes definicoes:
+Grafo Conexo: Um grafo em que ha, entre qualquer par de vertices desse grafo, ao menos um caminho simples.
 Grafo biconexo: Um grafo em que se retirada uma aresta qualquer, esse grafo continua a ser conexo.
 
 O programa tera a seguinte saida:

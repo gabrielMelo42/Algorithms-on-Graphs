@@ -23,7 +23,7 @@ typedef struct{
 	int ordem[MAX];
 	int ord;
 } GRAFO;
-//explicar os bagui de cor
+
 void inicializar(GRAFO* G){
 	int i;
 	G->ord=0;
@@ -77,9 +77,6 @@ void DFS1(GRAFO* G, int y){
 			G->cor[p->indice]=C;
 			G->ordem[p->indice]=++(G->ord);
 			G->minor[p->indice]=G->ord;
-			//G->ord = G->ord+1;
-			//G->ordem[p->indice]= G->ord;
-			//G->minor[p->indice]= G->ord;
 			G->pai[p->indice]= y;
 			DFS1(G, p->indice);
 		}
@@ -99,7 +96,6 @@ void DFS2(GRAFO* G, int z){
 
 	p=G->adj[z];
 	while(p){
-		//u=p->indice;
 		if(p->indice!=G->pai[z] && G->minor[p->indice] < G->minor[z]){
 			G->minor[z]=G->minor[p->indice];
 		}

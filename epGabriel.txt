@@ -9,8 +9,6 @@
 #define P 2
 #define MAX 13
 
-//Sobre as cores: B significa Branco, C significa Cinza, P significa Preto
-
 typedef struct s{
 	int indice;
 	struct s* prox;
@@ -79,9 +77,6 @@ void DFS1(GRAFO* G, int y){
 			G->cor[p->indice]=C;
 			G->ordem[p->indice]=++(G->ord);
 			G->minor[p->indice]=G->ord;
-			//G->ord = G->ord+1;
-			//G->ordem[p->indice]= G->ord;
-			//G->minor[p->indice]= G->ord;
 			G->pai[p->indice]= y;
 			DFS1(G, p->indice);
 		}
@@ -101,7 +96,6 @@ void DFS2(GRAFO* G, int z){
 
 	p=G->adj[z];
 	while(p){
-		//u=p->indice;
 		if(p->indice!=G->pai[z] && G->minor[p->indice] < G->minor[z]){
 			G->minor[z]=G->minor[p->indice];
 		}
@@ -115,21 +109,20 @@ bool DFST(GRAFO* G){
 	G->ordem[1]=G->ord;
 	G->minor[1]=G->ord;
 	DFS1(G, 1);
+	bool biconexo=true;
 	if(G->ord==MAX-1){
 		G->minor[1]=G->ordem[1];
 		DFS2(G, 1);
-	
-	bool biconexo=true;
-	int i;
-	for(i=1; i<MAX; i++){
-		printf("O vertice %d tem ordem %d e minor %d\n", i, G->ordem[i], G->minor[i]);
-		if(i!=1 && G->ordem[i]==G->minor[i]){
-			printf("ESSE VERTICE EH CRITICO\n");
-			biconexo=false;
+		int i;
+		for(i=1; i<MAX; i++){
+			printf("O vertice %d tem ordem %d e minor %d\n", i, G->ordem[i], G->minor[i]);
+			if(i!=1 && G->ordem[i]==G->minor[i]){
+				printf("A ARESTA %i - %i EH CRITICA\n",G->pai[i],i);
+				biconexo=false;
+			}
 		}
 	}
 	return biconexo;
-}
 }
 
 
